@@ -48,23 +48,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view;
-        if(this.useCardView){
-            view = layoutInflater.inflate(R.layout.ceil_card_2,parent,false);
-        }else {
-            view = layoutInflater.inflate(R.layout.ceil_normal_2,parent,false);
-        }
-
-        /*以下两个监听事件因为都是用new创建的监听器，所以不建议写在onBindViewHolder里(频繁创建)*/
+        view = layoutInflater.inflate(R.layout.card,parent,false);
         final MyViewHolder holder = new MyViewHolder(view);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {//频幕的点击事件，在viewholder创建时就建立监听器
-                Uri uri = Uri.parse("http://www.youdao.com/w/"+holder.textView_english.getText()+"/#keyfrom=dict2.top");
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(uri);
-                holder.itemView.getContext().startActivity(intent);
-            }
-        });
         holder.switchInvisible.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {//按钮监听事件

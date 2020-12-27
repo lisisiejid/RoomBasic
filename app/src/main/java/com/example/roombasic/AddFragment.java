@@ -39,7 +39,6 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add, container, false);
     }
 
@@ -75,8 +74,7 @@ public class AddFragment extends Fragment {
 
             }
         };
-        editTextEnglish.addTextChangedListener(textWatcher);//输入框添加以上监听事件，不然不起作用
-        editTextChinese.addTextChangedListener(textWatcher);
+        editTextEnglish.addTextChangedListener(textWatcher);//输入框添加以上监听事件
         buttonsumbit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

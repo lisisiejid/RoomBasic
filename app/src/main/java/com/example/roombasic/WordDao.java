@@ -9,22 +9,20 @@ import androidx.room.Update;
 
 import java.util.List;
 
-@Dao  //访问数据库的接口
-public interface WordDao {//数据库的增删查改
+@Dao
+public interface WordDao {
     @Insert
-    void insertWords(Word...words);//可以插入多个
+    void insertWords(Word...words);
 
     @Update
-    void UpdateWords(Word...words);//改
-
+    void UpdateWords(Word...words);
     @Delete
-    void DeleteWords(Word...words);//删
+    void DeleteWords(Word...words);
 
     @Query("DELETE FROM WORD")
-    void deleteAllWords();//清空
+    void deleteAllWords();
 
-    @Query("SELECT * FROM WORD ORDER BY ID DESC")//desc表示降序排列
-//    List<Word> getAllWords();//查
+    @Query("SELECT * FROM WORD ORDER BY ID DESC")
     LiveData<List<Word>> getAllWordsLive();
 
     @Query("SELECT * FROM WORD WHERE english_word LIKE :patten ORDER BY ID DESC")

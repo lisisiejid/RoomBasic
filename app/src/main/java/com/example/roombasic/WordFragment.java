@@ -207,21 +207,6 @@ public class WordFragment extends Fragment {
                 builder.create();
                 builder.show();
                 break;
-            case R.id.change://切换视图
-                SharedPreferences shp = requireActivity().getSharedPreferences(VIEW_TYPE_SHP,Context.MODE_PRIVATE);//记住用户的喜好(使否用卡片)
-                boolean viewType = shp.getBoolean(IS_USING_CARD,false);
-                SharedPreferences.Editor editor = shp.edit();//还要时刻修改值
-                if(viewType){//用了card
-                    recyclerView.setAdapter(adapter1);//换成没用
-                    editor.putBoolean(IS_USING_CARD,false);
-                    recyclerView.addItemDecoration(dividerItemDecoration);//加上分割线
-                }else {
-                    recyclerView.setAdapter(adapter2);
-                    editor.putBoolean(IS_USING_CARD, true);
-                    recyclerView.removeItemDecoration(dividerItemDecoration);//去掉分割线
-                }
-                editor.apply();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
