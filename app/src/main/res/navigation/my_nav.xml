@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/wordFragment"
         android:name="com.example.roombasic.WordFragment"
-        android:label="word"
+        android:label="快记首页"
         tools:layout="@layout/fragment_word">
         <action
             android:id="@+id/action_wordFragment_to_addFragment"
@@ -19,6 +19,6 @@
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.roombasic.AddFragment"
-        android:label="add"
+        android:label="添加事务"
         tools:layout="@layout/fragment_add" />
 </navigation>

@@ -45,20 +45,15 @@ public class WordFragment extends Fragment {
     private MyAdapter adapter1,adapter2;
     private LiveData<List<Word>> filterWords;//过滤过后的单词(查找)
     private static final String VIEW_TYPE_SHP = "view_type_shp";//用在用户偏好上面
-    private static final String IS_USING_CARD="is_using_card";
     private List<Word> allwords;//用于滑动删除时防止空指针
-    private DividerItemDecoration dividerItemDecoration;//分割线，用于非卡片布局，使得item之间有一个横线
 
-    public WordFragment() {
-        // Required empty public constructor
+    public WordFragment() {//显示主菜单
         setHasOptionsMenu(true);//fragment默认不显示menu，所以要写这一句来显示
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_word, container, false);
     }
 
@@ -70,16 +65,7 @@ public class WordFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         adapter1 = new MyAdapter(false,wordViewModel);
         adapter2 = new MyAdapter(true,wordViewModel);
-//        recyclerView.setAdapter(adapter1);
-        SharedPreferences shp = requireActivity().getSharedPreferences(VIEW_TYPE_SHP,Context.MODE_PRIVATE);//刚进来时，通过记录的用户的喜好就选则view的模式
-        boolean viewType = shp.getBoolean(IS_USING_CARD,false);
-        dividerItemDecoration = new DividerItemDecoration(requireActivity(),DividerItemDecoration.VERTICAL);//建立分割线，第一个参数是Context，第二个参数是方向，VERTICAL为垂直
-        if(viewType){
-            recyclerView.setAdapter(adapter2);
-        }else{
-            recyclerView.setAdapter(adapter1);
-            recyclerView.addItemDecoration(dividerItemDecoration);//只有非卡片布局需要添加一个分割线
-        }
+        recyclerView.setAdapter(adapter2);
         filterWords = wordViewModel.getAllWordsLive();//先初始化，避免空指针
         filterWords.observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
             @Override
@@ -98,7 +84,7 @@ public class WordFragment extends Fragment {
         FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton2);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//添加事件
                 NavController controller = Navigation.findNavController(v);
                 controller.navigate(R.id.action_wordFragment_to_addFragment);
             }
@@ -106,7 +92,6 @@ public class WordFragment extends Fragment {
 
         /*拖动移位，滑动删除*/
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,ItemTouchHelper.START | ItemTouchHelper.END){//两个参数，第一个参数为拖动，第二个参数为滑动
-
             @Override//拖动
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 Word wordFrom = allwords.get(viewHolder.getAdapterPosition());
