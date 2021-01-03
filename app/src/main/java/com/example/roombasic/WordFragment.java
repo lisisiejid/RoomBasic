@@ -57,29 +57,6 @@ public class WordFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_word, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        wordViewModel = ViewModelProviders.of(requireActivity()).get(WordViewModel.class);
-        recyclerView = requireActivity().findViewById(R.id.recycle);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        adapter1 = new MyAdapter(false,wordViewModel);
-        adapter2 = new MyAdapter(true,wordViewModel);
-        recyclerView.setAdapter(adapter2);
-        filterWords = wordViewModel.getAllWordsLive();//先初始化，避免空指针
-        filterWords.observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
-            @Override
-            public void onChanged(List<Word> words) {//第一个参数数用getViewLifeCycleOwner,而不使用requireActivity。是因为requireActivity是固定的，当界面切换到addFragment时会出现bug
-                int temp = adapter1.getItemCount();
-                allwords = words;//这里让allwords等上剩余的words
-                adapter1.setAllWords(words);
-                adapter2.setAllWords(words);
-                if(temp!=words.size()){
-                    adapter1.notifyDataSetChanged();
-                    adapter2.notifyDataSetChanged();
-                }
-            }
-        });
 
         FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton2);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +110,42 @@ public class WordFragment extends Fragment {
         imm.hideSoftInputFromWindow(getView().getWindowToken(),0);
     }
 
+    /*菜单的一些内容*/
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setMaxWidth(1000);//设置宽度，以免挡住标题
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            /*查询框*/
+            @Override
+            public boolean onQueryTextChange(String newText) {//只要改变就监听
+                String patten = newText.trim();//过滤空格
+                filterWords.removeObservers(getViewLifecycleOwner());//因为CreateActivity方法中已经建立了监听，所以避免冲突，将那个先移除
+                filterWords = wordViewModel.findWordWithPatten(patten);
+                filterWords.observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
+                    @Override
+                    public void onChanged(List<Word> words) {
+                        int temp = adapter1.getItemCount();
+                        allwords = words;
+                        adapter1.setAllWords(words);
+                        adapter2.setAllWords(words);
+                        if(temp!=words.size()){
+                            adapter1.notifyDataSetChanged();
+                            adapter2.notifyDataSetChanged();
+                        }
+                    }
+                });
+                return false;//如果后面还要做些什么就返回true，不做就返回false
+            }
+        });
+    }
 
     /*menu上的其它item*/
     @Override
