@@ -81,16 +81,5 @@ public class WordRepository {
         }
     }
 
-    static class ClearAsyncTask extends AsyncTask<Void,Void,Void>{
-        private WordDao wordDao;
-
-        public ClearAsyncTask(WordDao wordDao) {
-            this.wordDao = wordDao;
-        }
-        @Override
-        protected Void doInBackground(Void... voids) {
-            wordDao.deleteAllWords();
-            return null;
-        }
     }
 }
