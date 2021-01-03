@@ -133,42 +133,7 @@ public class WordFragment extends Fragment {
         imm.hideSoftInputFromWindow(getView().getWindowToken(),0);
     }
 
-    /*菜单的一些内容*/
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.main_menu,menu);
-        super.onCreateOptionsMenu(menu, inflater);
-        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
-        searchView.setMaxWidth(1000);//设置宽度，以免挡住标题
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
 
-            /*查询框*/
-            @Override
-            public boolean onQueryTextChange(String newText) {//只要改变就监听
-                String patten = newText.trim();//过滤空格
-                filterWords.removeObservers(getViewLifecycleOwner());//因为CreateActivity方法中已经建立了监听，所以避免冲突，将那个先移除
-                filterWords = wordViewModel.findWordWithPatten(patten);
-                filterWords.observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
-                    @Override
-                    public void onChanged(List<Word> words) {
-                        int temp = adapter1.getItemCount();
-                        allwords = words;
-                        adapter1.setAllWords(words);
-                        adapter2.setAllWords(words);
-                        if(temp!=words.size()){
-                            adapter1.notifyDataSetChanged();
-                            adapter2.notifyDataSetChanged();
-                        }
-                    }
-                });
-                return false;//如果后面还要做些什么就返回true，不做就返回false
-            }
-        });
-    }
 
     /*menu上的其它item*/
     @Override
