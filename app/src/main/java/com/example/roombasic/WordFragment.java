@@ -58,15 +58,6 @@ public class WordFragment extends Fragment {
     }
 
 
-        FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton2);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {//添加事件
-                NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_wordFragment_to_addFragment);
-            }
-        });
-
         /*拖动移位，滑动删除*/
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,ItemTouchHelper.START | ItemTouchHelper.END){//两个参数，第一个参数为拖动，第二个参数为滑动
             @Override//拖动
